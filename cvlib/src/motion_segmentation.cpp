@@ -10,14 +10,17 @@
 
 namespace cvlib
 {
-void motion_segmentation::apply(cv::InputArray _image, cv::OutputArray _fgmask, double)
+void motion_segmentation::apply(cv::InputArray _image, cv::OutputArray _fgmask, double learningRate)
 {
-    // \todo implement your own algorithm:
-    //       * MinMax
-    //       * Mean
-    //       * 1G
-    //       * GMM
+    cv::Mat image = _image.getMat();
+    cv::Mat fgmask = _fgmask.getMat();
 
-    // \todo implement bg model updates
+    bg_model_ = (1 - learningRate) * bg_model_ + learningRate * image;
+    cv::absdiff(image, bg_model_, fgmask);
+    threshold(fgmask, fgmask, 25, 128, cv::THRESH_BINARY);
+    cv::cvtColor(fgmask, fgmask, cv::COLOR_BGR2GRAY);
+	
+    _fgmask.create(image.size(), CV_8UC3);
+    _fgmask.assign(fgmask);
 }
 } // namespace cvlib
