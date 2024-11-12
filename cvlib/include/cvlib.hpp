@@ -30,7 +30,7 @@ class motion_segmentation : public cv::BackgroundSubtractor
 {
     public:
     /// \brief ctor
-    motion_segmentation::motion_segmentation(cv::Mat frame) : bg_model_(frame) {}
+    motion_segmentation(cv::Mat frame) : bg_model_(frame) {}
 
     /// \see cv::BackgroundSubtractor::apply
     void apply(cv::InputArray image, cv::OutputArray fgmask, double learningRate = -1) override;
